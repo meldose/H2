@@ -45,7 +45,8 @@ LOWER_GAINS = dict(zip(LOWER_NAMES, zip(
     [150, 150, 150, 250, 60, 90] * 2 + [200, 200, 200],
     [2., 2., 2., 2., .3, .1] * 2 + [2.5, 5., 5.],
 )))
-URDF = Path(__file__).parent / "src/h2_description/urdf/h2.urdf"
+WORKSPACE_ROOT = Path(__file__).resolve().parents[1]
+URDF = WORKSPACE_ROOT / "src/h2_description/urdf/h2.urdf"
 STALE_SECONDS = 0.25
 MAX_STEP = math.radians(30)
 MAX_SPEED = math.radians(20)
@@ -53,6 +54,10 @@ TRACKING_LIMIT = math.radians(20)
 
 
 def joint_limits(names=ARM_NAMES):
+    if not URDF.is_file():
+        raise RuntimeError(
+            f"H2 URDF not found at {URDF}. Restore src/h2_description before using this tool."
+        )
     root = ET.parse(URDF).getroot()
     return {
         name: tuple(float(root.find(f"joint[@name='{name}']/limit").get(key))

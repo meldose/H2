@@ -3,9 +3,12 @@ import contextlib
 import io
 from pathlib import Path
 import runpy
+import sys
 import unittest
 from unittest.mock import patch
 
+SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
+sys.path.insert(0, str(SCRIPTS))
 import h2_motion_common as motions
 
 
@@ -17,7 +20,7 @@ class MotionTests(unittest.TestCase):
         }
         for name, joint in expected.items():
             with self.subTest(name=name), patch.object(motions.controller, "main", return_value=0) as call:
-                path = Path(__file__).parent / f"h2_motion_{name}.py"
+                path = SCRIPTS / f"h2_motion_{name}.py"
                 with patch("sys.argv", [str(path), "--interface", "test0"]):
                     with self.assertRaises(SystemExit) as result:
                         runpy.run_path(str(path), run_name="__main__")

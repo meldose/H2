@@ -9,10 +9,11 @@
 
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
+WORKSPACE_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$WORKSPACE_DIR"
 
 # Feste Reihenfolge: zuerst die MuJoCo/DDS-Sessions, dann RViz/MoveIt.
-# Kurzbeschreibungen — bei Änderungen auch tmux/RUNBOOK.md abgleichen.
+# Kurzbeschreibungen — bei Änderungen auch docs/RUNBOOK.md abgleichen.
 ORDER=(
     h2_example
     h2_dds_test

@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+
+# ROS 2 / colcon build products
+build/
+install/
+log/
+
+# Local editor and OS files
+.vscode/*.local.json
+.DS_Store

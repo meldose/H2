@@ -29,7 +29,8 @@ def run(args):
     from trajectory_msgs.msg import JointTrajectoryPoint
 
     names = [f'{args.arm}_{part}_joint' for part in PARTS]
-    root = ET.parse(Path(__file__).parent / 'src/h2_description/urdf/h2.urdf').getroot()
+    workspace_root = Path(__file__).resolve().parents[1]
+    root = ET.parse(workspace_root / 'src/h2_description/urdf/h2.urdf').getroot()
     limits = [tuple(float(root.find(f"joint[@name='{name}']/limit").get(key))
                     for key in ('lower', 'upper')) for name in names]
     rclpy.init()
@@ -55,7 +56,7 @@ def run(args):
 
     try:
         if not client.wait_for_server(timeout_sec=15):
-            raise RuntimeError('Simulation controller unavailable. Start ./run_h2_rviz_sim.sh first.')
+            raise RuntimeError('Simulation controller unavailable. Start ./scripts/run_h2_rviz_sim.sh first.')
         deadline = time.monotonic() + 10
         while not all(name in feedback for name in names) or time.monotonic() - received[0] > 1:
             if time.monotonic() >= deadline:

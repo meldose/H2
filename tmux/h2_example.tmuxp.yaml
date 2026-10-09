@@ -30,7 +30,7 @@ windows:
     panes:
       - shell_command:
           - ./docker/run_container.sh
-          - ./run_unitree_mujoco.sh
+          - ./scripts/run_unitree_mujoco.sh
 
   - window_name: control
     panes:

@@ -23,16 +23,16 @@ spot while orientation and joints keep animating — no error, just less
 data available in that control mode.
 
 Usage:
-    python3 view_h2_real_state.py --interface eth0   # real robot, domain 0
-    python3 view_h2_real_state.py --mock              # local MuJoCo sim instead,
+    python3 scripts/view_h2_real_state.py --interface eth0   # real robot, domain 0
+    python3 scripts/view_h2_real_state.py --mock              # local MuJoCo sim instead,
                                                         # domain 1 / "lo" — same
                                                         # convention as ros2_control's
                                                         # use_mock_hardware, requires
-                                                        # run_unitree_mujoco.sh already
-                                                        # running (see tmux/RUNBOOK.md)
+                                                        # scripts/run_unitree_mujoco.sh already
+                                                        # running (see docs/RUNBOOK.md)
 
 Real-robot interface is whatever `ip a` shows once the Ethernet cable is
-connected (see tmux/RUNBOOK.md § Real robot for the one-time host IP setup);
+connected (see docs/RUNBOOK.md § Real robot for the one-time host IP setup);
 domain_id is 0 there, the real robot's default.
 """
 import argparse

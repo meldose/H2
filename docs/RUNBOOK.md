@@ -30,7 +30,7 @@ Other tmuxp sessions in this folder — each is self-contained (starts its own c
 ```bash
 cd ~/ros2/h2_ws
 ./docker/run_container.sh
-./run_unitree_mujoco.sh
+./scripts/run_unitree_mujoco.sh
 ```
 In the GUI window (click in first): `9` = toggle elastic band, `8`/`7` = raise/lower. H2 collapses immediately without the band active.
 
@@ -88,13 +88,13 @@ cd ~/unitree_mujoco/simulate && mkdir build && cd build && cmake .. && make -j$(
   ```
 - `h2_ankle_swing_example` needs the `--remap` flags above — it's a real bug in that specific file (hardcodes an already-DDS-mangled topic name), not fixed upstream, not touched here since it's Unitree's file.
 - The whole settle+swing sequence is a **one-shot 6 seconds** (3s settle, 3s swing), then it holds `q=0` forever at full PD gains (mode stays active — it doesn't go limp). If you look away and come back later, "just standing there" is the *expected* end state, not a failure — restart the node to see the motion again, and watch continuously.
-- Don't run the raw `unitree_mujoco` binary directly — use `./run_unitree_mujoco.sh`, or it crashes on a CycloneDDS library conflict with ROS's auto-sourced environment.
+- Don't run the raw `unitree_mujoco` binary directly — use `./scripts/run_unitree_mujoco.sh`, or it crashes on a CycloneDDS library conflict with ROS's auto-sourced environment.
 - `ROS_DOMAIN_ID` must be `1` for simulation (matches MuJoCo's `config.yaml`), default `0` for the real robot.
 
 ## Real robot (not simulation)
 
 To send an arm joint command to the real H2 and watch measured movement in
-RViz, see [Real arm control](../REAL_ARM_CONTROL.md). The live RViz session
+RViz, see [Real arm control](REAL_ARM_CONTROL.md). The live RViz session
 remains read-only; `command_h2_arm.py` is the separate command process.
 
 ```bash

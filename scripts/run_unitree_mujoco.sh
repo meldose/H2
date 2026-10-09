@@ -12,7 +12,7 @@
 # doing that instead would flip the same mismatch onto ros2/rmw_cyclonedds_cpp
 # commands run in the same shell.
 #
-# Usage: ./run_unitree_mujoco.sh
+# Usage: ./scripts/run_unitree_mujoco.sh
 
 exec env LD_LIBRARY_PATH="/opt/unitree_robotics/lib:$LD_LIBRARY_PATH" \
     "$HOME/unitree_mujoco/simulate/build/unitree_mujoco" "$@"

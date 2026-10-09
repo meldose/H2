@@ -8,7 +8,7 @@ All new controllers and feedback use the `/h2_sim` namespace.
 Terminal 1:
 
 ```bash
-bash ./run_h2_rviz_sim.sh
+bash ./scripts/run_h2_rviz_sim.sh
 ```
 
 Terminal 2, from this directory:
@@ -16,10 +16,10 @@ Terminal 2, from this directory:
 ```bash
 source /opt/ros/humble/setup.bash  # use jazzy instead if your container runs Jazzy
 source install/h2_rviz_sim/setup.bash
-python3 h2_sim_motion.py --arm left --joint elbow --degrees 20
-python3 h2_sim_motion.py --arm right --joint elbow --degrees 20
-python3 h2_sim_motion.py --arm left --joint wrist_roll --degrees 15 --repeat 3
-python3 h2_sim_motion.py --arm right --joint wrist_roll --degrees -15
+python3 scripts/h2_sim_motion.py --arm left --joint elbow --degrees 20
+python3 scripts/h2_sim_motion.py --arm right --joint elbow --degrees 20
+python3 scripts/h2_sim_motion.py --arm left --joint wrist_roll --degrees 15 --repeat 3
+python3 scripts/h2_sim_motion.py --arm right --joint wrist_roll --degrees -15
 ```
 
 Each command reads the current simulated arm pose, moves one joint smoothly,

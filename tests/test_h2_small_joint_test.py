@@ -1,9 +1,12 @@
 """Offline checks; the real controller is mocked and never connects to DDS."""
 import contextlib
 import io
+from pathlib import Path
+import sys
 import unittest
 from unittest.mock import patch
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import h2_small_joint_test as small
 
 

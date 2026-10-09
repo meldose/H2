@@ -1,12 +1,18 @@
 #!/usr/bin/env bash
 # Run inside the ROS workspace environment/container.
 if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
-    echo 'Run with: bash ./run_h2_rviz_sim.sh (do not source this launcher).' >&2
+    echo 'Run with: bash ./scripts/run_h2_rviz_sim.sh (do not source this launcher).' >&2
     return 1
 fi
 set -eo pipefail
-SIM_WORKSPACE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SIM_WORKSPACE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$SIM_WORKSPACE"
+for package in h2_description h2_moveit_config; do
+    if [[ ! -d "src/$package" ]]; then
+        echo "Missing src/$package. Restore the H2 ROS packages before launching RViz simulation." >&2
+        exit 1
+    fi
+done
 if ! command -v ros2 >/dev/null 2>&1; then
     for distro in jazzy humble; do
         if [[ -f "/opt/ros/$distro/setup.bash" ]]; then

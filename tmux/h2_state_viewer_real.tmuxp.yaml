@@ -14,7 +14,7 @@ start_directory: ~/ros2/h2_ws
 # interface from tmux/h2_interface.env so it isn't retyped on the command
 # line each time. Read-only: only subscribes rt/lowstate, never publishes
 # rt/lowcmd, so it's safe to point at the robot's live DDS domain — see
-# tmux/RUNBOOK.md § Real robot for the one-time host IP/interface setup.
+# docs/RUNBOOK.md § Real robot for the one-time host IP/interface setup.
 #
 # No sim counterpart — running view_h2_real_state.py --mock next to the sim's
 # own MuJoCo window just opened a second, near-identical MuJoCo window
@@ -33,4 +33,4 @@ windows:
           - ./docker/run_container.sh
           - >-
             set -a; source tmux/h2_interface.env; set +a;
-            python3 view_h2_real_state.py --interface "$H2_INTERFACE"
+            python3 scripts/view_h2_real_state.py --interface "$H2_INTERFACE"

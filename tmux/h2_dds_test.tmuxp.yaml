@@ -16,7 +16,7 @@ start_directory: ~/ros2/h2_ws
 # prints the state it's publishing over DDS — SportModeState position and
 # LowState IMU (quaternion/gyro/accelerometer) — via
 # simulate_python/test/test_unitree_sdk2_h2.py (the unitree_hg-typed copy of
-# the upstream go2-only test, see AGENT.md/tmux/RUNBOOK.md for why hg is
+# the upstream go2-only test, see AGENT.md/docs/RUNBOOK.md for why hg is
 # needed for H2). Also publishes a small constant leg torque like the
 # upstream test does, so don't run this next to `control`/h2_ankle_swing_example
 # on the same container at the same time.
@@ -34,7 +34,7 @@ windows:
     panes:
       - shell_command:
           - ./docker/run_container.sh
-          - ./run_unitree_mujoco.sh
+          - ./scripts/run_unitree_mujoco.sh
 
   - window_name: state
     panes:

@@ -15,7 +15,7 @@ This implementation has offline tests, but has not been tested on hardware.
 
 On the host, set the Ethernet interface connected to H2 in
 `tmux/h2_interface.env` (currently `eth0`). An external workstation needs a
-robot-network address, as described in `tmux/RUNBOOK.md`.
+robot-network address, as described in `docs/RUNBOOK.md`.
 
 ```bash
 cd ~/ros2/h2_ws
@@ -36,7 +36,7 @@ states.
 From this directory on the robot host:
 
 ```bash
-PYTHONPATH=/home/unitree/unitree_sdk2_python python3 h2_joint_cli.py --interface eth0
+PYTHONPATH=/home/unitree/unitree_sdk2_python python3 scripts/h2_joint_cli.py --interface eth0
 ```
 
 The menu labels 19 arm/head/waist joints by default, or all 31 joints with
@@ -65,8 +65,8 @@ the normal robot controller before requesting Arm SDK motion.
 Select the low-level backend in the same menu:
 
 ```bash
-PYTHONPATH=/home/unitree/unitree_sdk2_python python3 h2_joint_cli.py --interface eth0 --topic lowcmd --check
-PYTHONPATH=/home/unitree/unitree_sdk2_python python3 h2_joint_cli.py --interface eth0 --topic lowcmd
+PYTHONPATH=/home/unitree/unitree_sdk2_python python3 scripts/h2_joint_cli.py --interface eth0 --topic lowcmd --check
+PYTHONPATH=/home/unitree/unitree_sdk2_python python3 scripts/h2_joint_cli.py --interface eth0 --topic lowcmd
 ```
 
 The direct command also accepts `--topic lowcmd`. Physically support/suspend the
@@ -98,9 +98,9 @@ check and limits relative arm motion to 2 degrees. It uses
 `command_h2_arm.py` from the same directory:
 
 ```bash
-python3 h2_small_joint_test.py --interface enp6s0
+python3 scripts/h2_small_joint_test.py --interface enp6s0
 # Only after the check succeeds, to command real motion:
-python3 h2_small_joint_test.py --interface enp6s0 --execute
+python3 scripts/h2_small_joint_test.py --interface enp6s0 --execute
 ```
 
 Execution moves the left elbow by +2 degrees over 5 seconds, holds for 1
@@ -117,7 +117,7 @@ In another host terminal, enter the same container:
 docker exec -it h2_ws_container bash
 cd ~/h2_ws
 source tmux/h2_interface.env
-python3 command_h2_arm.py --list
+python3 scripts/command_h2_arm.py --list
 ```
 
 Have the robot in its normal supported standing mode, with the arm workspace
@@ -129,14 +129,14 @@ First read the real position and validate a 10-degree relative elbow target
 without enabling control or publishing motor commands:
 
 ```bash
-python3 command_h2_arm.py left_elbow_joint 10 --relative \
+python3 scripts/command_h2_arm.py left_elbow_joint 10 --relative \
   --interface "$H2_INTERFACE" --check
 ```
 
 Then execute that motion:
 
 ```bash
-python3 command_h2_arm.py left_elbow_joint 10 --relative \
+python3 scripts/command_h2_arm.py left_elbow_joint 10 --relative \
   --interface "$H2_INTERFACE" --duration 3 --hold 3
 ```
 
@@ -147,7 +147,7 @@ The tool also reports the measured target position. Without `--relative`, the
 angle is an absolute joint angle in degrees; for example:
 
 ```bash
-python3 command_h2_arm.py left_elbow_joint 30 \
+python3 scripts/command_h2_arm.py left_elbow_joint 30 \
   --interface "$H2_INTERFACE" --duration 3 --hold 5
 ```
 
@@ -180,16 +180,16 @@ observe the joint's positive direction. These are individual joint motions,
 not coordinated waving, Cartesian hand movement or finger/gripper control.
 
 ```bash
-python3 h2_motion_right_elbow.py --interface enp6s0
+python3 scripts/h2_motion_right_elbow.py --interface enp6s0
 # After a successful check and clearing the motion path:
-python3 h2_motion_right_elbow.py --interface enp6s0 --execute
+python3 scripts/h2_motion_right_elbow.py --interface enp6s0 --execute
 ```
 
 For a larger wrist-roll test, first check the requested angle:
 
 ```bash
-python3 h2_motion_left_wrist.py --interface enp6s0 --degrees 5
-python3 h2_motion_left_wrist.py --interface enp6s0 --degrees 5 --execute
+python3 scripts/h2_motion_left_wrist.py --interface enp6s0 --degrees 5
+python3 scripts/h2_motion_left_wrist.py --interface enp6s0 --degrees 5 --execute
 ```
 
 Motion takes 5 seconds, holds 2 seconds and returns over 5 seconds. Both arms
@@ -227,8 +227,8 @@ hold their measured starting positions. Arm selections retain the existing
 ### Leg and waist adjustments (lowcmd only)
 
 ```bash
-PYTHONPATH=/home/unitree/unitree_sdk2_python python3 command_h2_arm.py --topic lowcmd --list
-PYTHONPATH=/home/unitree/unitree_sdk2_python python3 command_h2_arm.py left_knee_joint 2 --relative --duration 5 --interface eth0 --topic lowcmd --check
+PYTHONPATH=/home/unitree/unitree_sdk2_python python3 scripts/command_h2_arm.py --topic lowcmd --list
+PYTHONPATH=/home/unitree/unitree_sdk2_python python3 scripts/command_h2_arm.py left_knee_joint 2 --relative --duration 5 --interface eth0 --topic lowcmd --check
 ```
 
 Remove `--check` to execute after preparing the supported robot and releasing the
@@ -248,9 +248,9 @@ been tested offline and do not implement balance or collision checking.
 ### Waist adjustments through Arm SDK
 
 ```bash
-PYTHONPATH=/home/unitree/unitree_sdk2_python python3 h2_joint_cli.py --interface eth0 --topic arm_sdk
+PYTHONPATH=/home/unitree/unitree_sdk2_python python3 scripts/h2_joint_cli.py --interface eth0 --topic arm_sdk
 # Read-only direct check:
-PYTHONPATH=/home/unitree/unitree_sdk2_python python3 command_h2_arm.py waist_yaw_joint 2 --relative --duration 5 --interface eth0 --topic arm_sdk --check
+PYTHONPATH=/home/unitree/unitree_sdk2_python python3 scripts/command_h2_arm.py waist_yaw_joint 2 --relative --duration 5 --interface eth0 --topic arm_sdk --check
 ```
 
 Waist selections hold both arms and all three waist joints while moving the
