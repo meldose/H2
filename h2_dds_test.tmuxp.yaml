@@ -1,0 +1,45 @@
+session_name: h2_dds_test
+start_directory: ~/ros2/h2_ws
+
+# ============================================================================
+# h2_dds_test - tmux Session
+# Usage:       tmuxp load tmux/h2_dds_test.tmuxp.yaml
+# Attach:      tmux attach -t h2_dds_test
+# Detach:      Ctrl+B, then D
+# Switch pane: Ctrl+B, then arrow key / mouse click
+# Zoom pane:   Ctrl+B, then Z (again = back)
+# Scroll:      mouse wheel
+# Stop:        tmux kill-session -t h2_dds_test
+# ============================================================================
+#
+# Two windows: the MuJoCo simulator (GUI, H2 loaded), and a terminal that
+# prints the state it's publishing over DDS — SportModeState position and
+# LowState IMU (quaternion/gyro/accelerometer) — via
+# simulate_python/test/test_unitree_sdk2_h2.py (the unitree_hg-typed copy of
+# the upstream go2-only test, see AGENT.md/tmux/RUNBOOK.md for why hg is
+# needed for H2). Also publishes a small constant leg torque like the
+# upstream test does, so don't run this next to `control`/h2_ankle_swing_example
+# on the same container at the same time.
+#
+# For a read-only view with no torque published, use
+# h2_rviz_live_sim.tmuxp.yaml instead, or h2_example.tmuxp.yaml for the
+# ankle-swing demo.
+
+options:
+  mouse: 'on'
+  history-limit: 10000
+
+windows:
+  - window_name: simulator
+    panes:
+      - shell_command:
+          - ./docker/run_container.sh
+          - ./run_unitree_mujoco.sh
+
+  - window_name: state
+    panes:
+      - shell_command:
+          - until docker exec h2_ws_container true 2>/dev/null; do sleep 1; done
+          - >-
+            docker exec -it h2_ws_container bash -c
+            "cd ~/unitree_mujoco/simulate_python/test && exec python3 test_unitree_sdk2_h2.py"

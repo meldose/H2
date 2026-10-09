@@ -1,0 +1,37 @@
+session_name: h2_rviz_live_sim
+start_directory: ~/ros2/h2_ws
+
+# ============================================================================
+# h2_rviz_live_sim - tmux Session
+# Usage:       tmuxp load tmux/h2_rviz_live_sim.tmuxp.yaml
+# Attach:      tmux attach -t h2_rviz_live_sim
+# Stop:        tmux kill-session -t h2_rviz_live_sim
+# ============================================================================
+#
+# Self-contained: starts the container + MuJoCo sim itself (simulator
+# window), then RViz + H2's URDF driven by real joint data from that sim via
+# h2_bridge's joint_state_bridge node (rt/lowstate -> /joint_states,
+# read-only, never publishes rt/lowcmd) in a second window. No other
+# session needs to be running first.
+#
+# Real-robot counterpart: tmux/h2_rviz_live_real.tmuxp.yaml.
+
+options:
+  mouse: 'on'
+  history-limit: 10000
+
+windows:
+  - window_name: simulator
+    panes:
+      - shell_command:
+          - ./docker/run_container.sh
+          - ./run_unitree_mujoco.sh
+
+  - window_name: rviz
+    panes:
+      - shell_command:
+          - until docker exec h2_ws_container true 2>/dev/null; do sleep 1; done
+          - >-
+            docker exec -it h2_ws_container bash -c
+            "source /opt/ros/humble/setup.bash && source ~/h2_ws/install/setup.bash
+            && exec ros2 launch h2_bridge h2_live_launch.py mock:=true"

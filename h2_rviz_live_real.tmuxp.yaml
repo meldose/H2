@@ -1,0 +1,33 @@
+session_name: h2_rviz_live_real
+start_directory: ~/ros2/h2_ws
+
+# ============================================================================
+# h2_rviz_live_real - tmux Session
+# Usage:       tmuxp load tmux/h2_rviz_live_real.tmuxp.yaml
+# Attach:      tmux attach -t h2_rviz_live_real
+# Stop:        tmux kill-session -t h2_rviz_live_real
+# ============================================================================
+#
+# RViz + H2's URDF, driven by real joint data from the real robot via
+# h2_bridge's joint_state_bridge node (rt/lowstate -> /joint_states,
+# read-only, never publishes rt/lowcmd) — same domain_id (0) and interface
+# config as view_h2_real_state.py's real-robot mode.
+#
+# Interface name read from tmux/h2_interface.env, same file
+# h2_state_viewer_real.tmuxp.yaml uses — not retyped here.
+#
+# Sim counterpart: tmux/h2_rviz_live_sim.tmuxp.yaml.
+
+options:
+  mouse: 'on'
+  history-limit: 10000
+
+windows:
+  - window_name: rviz
+    panes:
+      - shell_command:
+          - ./docker/run_container.sh
+          - >-
+            set -a; source tmux/h2_interface.env; set +a;
+            source /opt/ros/humble/setup.bash && source ~/h2_ws/install/setup.bash
+            && ros2 launch h2_bridge h2_live_launch.py interface:="$H2_INTERFACE"

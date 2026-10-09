@@ -1,0 +1,39 @@
+session_name: h2_moveit_demo
+start_directory: ~/ros2/h2_ws
+
+# ============================================================================
+# h2_moveit_demo - tmux Session
+# Usage:       tmuxp load tmux/h2_moveit_demo.tmuxp.yaml
+# Attach:      tmux attach -t h2_moveit_demo
+# Stop:        tmux kill-session -t h2_moveit_demo
+# ============================================================================
+#
+# MoveIt 2 RViz demo for H2's arms (src/h2_moveit_config) — left_arm/
+# right_arm planning groups only, legs/locomotion excluded (Unitree's own
+# built-in controller stays responsible for those, same split as
+# hucebot/g1pilot's design for the G1 — see config/h2.srdf's header).
+#
+# Fake-execution: ros2_control's mock_components/GenericSystem hardware
+# (h2_description's h2.urdf <ros2_control> block) + joint_trajectory_controller
+# per arm. "Execute" in RViz genuinely runs a trajectory through the same
+# action-server path a real robot driver would receive — verified directly
+# by sending a FollowJointTrajectory goal and confirming /joint_states
+# actually moved — but nothing is connected to sim or the real robot's
+# rt/lowcmd. That bridge is a separate, deliberately not-yet-built piece.
+#
+# Self-collision matrix is adjacency-only (generated from URDF joint
+# structure, not MoveIt Setup Assistant's sampling-based default matrix —
+# that needs the interactive GUI). Planning is conservative, not unsafe.
+
+options:
+  mouse: 'on'
+  history-limit: 10000
+
+windows:
+  - window_name: moveit
+    panes:
+      - shell_command:
+          - ./docker/run_container.sh
+          - >-
+            source /opt/ros/humble/setup.bash && source ~/h2_ws/install/setup.bash
+            && ros2 launch h2_moveit_config demo_launch.py

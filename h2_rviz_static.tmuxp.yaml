@@ -1,0 +1,27 @@
+session_name: h2_rviz_static
+start_directory: ~/ros2/h2_ws
+
+# ============================================================================
+# h2_rviz_static - tmux Session
+# Usage:       tmuxp load tmux/h2_rviz_static.tmuxp.yaml
+# Attach:      tmux attach -t h2_rviz_static
+# Stop:        tmux kill-session -t h2_rviz_static
+# ============================================================================
+#
+# RViz + H2's URDF (src/h2_description), driven by joint_state_publisher_gui
+# sliders — no sim or real robot connection, just the model. For live sim/
+# real joint data instead, see h2_rviz_live_sim.tmuxp.yaml /
+# h2_rviz_live_real.tmuxp.yaml.
+
+options:
+  mouse: 'on'
+  history-limit: 10000
+
+windows:
+  - window_name: rviz
+    panes:
+      - shell_command:
+          - ./docker/run_container.sh
+          - >-
+            source /opt/ros/humble/setup.bash && source ~/h2_ws/install/setup.bash
+            && ros2 launch h2_description display_launch.py
