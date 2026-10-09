@@ -1,0 +1,4 @@
+{
+    "git.detectSubmodulesLimit": 20,
+    "cmake.ignoreCMakeListsMissing": true
+}
