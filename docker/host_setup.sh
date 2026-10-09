@@ -11,6 +11,9 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WS_DIR="$(dirname "$SCRIPT_DIR")"
+# Keep Docker image, container, and in-container workspace names stable even
+# when this checkout directory is renamed (for example, H2 instead of h2_ws).
+export PROJECT_WORKSPACE_NAME=h2_ws
 
 # ------------------------------------------------------------------------------
 # 0. Initialize Git Submodules

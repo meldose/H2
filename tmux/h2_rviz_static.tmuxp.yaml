@@ -1,5 +1,5 @@
 session_name: h2_rviz_static
-start_directory: ~/ros2/h2_ws
+start_directory: ..
 
 # ============================================================================
 # h2_rviz_static - tmux Session
@@ -21,7 +21,8 @@ windows:
   - window_name: rviz
     panes:
       - shell_command:
-          - ./docker/run_container.sh
           - >-
-            source /opt/ros/humble/setup.bash && source ~/h2_ws/install/setup.bash
-            && ros2 launch h2_description display_launch.py
+            ./docker/run_container.sh bash -lc
+            'colcon build --packages-select h2_description
+            && source install/setup.bash
+            && exec ros2 launch h2_description display_launch.py'

@@ -1,5 +1,5 @@
 session_name: h2_example
-start_directory: ~/ros2/h2_ws
+start_directory: ..
 
 # ============================================================================
 # h2_example - tmux Session

@@ -10,8 +10,9 @@ set -e  # Exit on error
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOCKER_DIR="$(dirname "$SCRIPT_DIR")"
 WS_DIR="$(dirname "$DOCKER_DIR")"
-WORKSPACE_NAME="$(basename "$WS_DIR")"
-IMAGE_NAME="${WORKSPACE_NAME}_image"
+WORKSPACE_NAME="${PROJECT_WORKSPACE_NAME:-$(basename "$WS_DIR")}"
+WORKSPACE_SLUG="$(printf '%s' "$WORKSPACE_NAME" | tr '[:upper:]' '[:lower:]')"
+IMAGE_NAME="${WORKSPACE_SLUG}_image"
 BASE_IMAGE_NAME="robost-ros2-base:humble"
 
 # =============================================================================
@@ -406,8 +407,14 @@ fi
 
 if ! command -v tmuxp &> /dev/null; then
     echo "Installing tmuxp..."
-    sudo apt-get install -y python3-pip 2>/dev/null || true
-    pip3 install --user tmuxp 2>/dev/null || pipx install tmuxp 2>/dev/null || sudo pip3 install tmuxp
+    # Prefer the distribution package: it is compatible with PEP 668, which
+    # intentionally rejects system-wide pip installs on current Ubuntu.
+    if ! sudo apt-get install -y tmuxp; then
+        echo "tmuxp is unavailable from apt; installing it in an isolated pipx environment..."
+        sudo apt-get install -y pipx
+        pipx install tmuxp
+        echo "Add ~/.local/bin to PATH if tmuxp is not found in a new shell."
+    fi
 else
     echo "tmuxp is already installed"
 fi

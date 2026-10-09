@@ -10,10 +10,15 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOCKER_DIR="$(dirname "$SCRIPT_DIR")"
 WS_DIR="$(dirname "$DOCKER_DIR")"
-WORKSPACE_NAME="$(basename "$WS_DIR")"
-IMAGE_NAME="${WORKSPACE_NAME}_image"
-CONTAINER_NAME="${WORKSPACE_NAME}_container"
+WORKSPACE_NAME="${PROJECT_WORKSPACE_NAME:-$(basename "$WS_DIR")}"
+WORKSPACE_SLUG="$(printf '%s' "$WORKSPACE_NAME" | tr '[:upper:]' '[:lower:]')"
+IMAGE_NAME="${WORKSPACE_SLUG}_image"
+CONTAINER_NAME="${WORKSPACE_SLUG}_container"
 WORKSPACE_DIR="/home/robost/$WORKSPACE_NAME"
+CONTAINER_COMMAND=("$@")
+if [ ${#CONTAINER_COMMAND[@]} -eq 0 ]; then
+    CONTAINER_COMMAND=(/bin/bash)
+fi
 
 # ==============================================================================
 # Platform Detection
@@ -106,7 +111,7 @@ run_amd64() {
         "${EXTRA_DOCKER_ARGS_COMMON[@]}" \
         "${EXTRA_DOCKER_ARGS_AMD64[@]}" \
         "$IMAGE_NAME" \
-        /bin/bash
+        "${CONTAINER_COMMAND[@]}"
 }
 
 run_arm64() {
@@ -143,7 +148,7 @@ run_arm64() {
         "${EXTRA_DOCKER_ARGS_COMMON[@]}" \
         "${EXTRA_DOCKER_ARGS_ARM64[@]}" \
         "$IMAGE_NAME" \
-        /bin/bash
+        "${CONTAINER_COMMAND[@]}"
 }
 
 run_wsl() {
@@ -183,7 +188,7 @@ run_wsl() {
         "${EXTRA_DOCKER_ARGS_COMMON[@]}" \
         "${EXTRA_DOCKER_ARGS_WSL[@]}" \
         "$IMAGE_NAME" \
-        /bin/bash
+        "${CONTAINER_COMMAND[@]}"
 }
 
 # ==============================================================================

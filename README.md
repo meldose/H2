@@ -19,8 +19,9 @@ real-robot joint commands.
 
 Clone `unitree_ros2` and `unitree_mujoco` beside this repository. The container
 runner mounts both as siblings because their upstream setup scripts require
-those paths. The ROS packages listed above must be present under `src/`; this
-checkout does not contain them, so recover or initialize them before building.
+those paths. The included `h2_description` package supports the static RViz
+viewer; add `h2_moveit_config` and `h2_bridge` under `src/` for the MoveIt and
+live-state sessions.
 
 ## First-time setup
 

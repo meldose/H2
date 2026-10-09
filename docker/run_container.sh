@@ -10,6 +10,9 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WS_DIR="$(dirname "$SCRIPT_DIR")"
+# See docker/host_setup.sh. tmux sessions and helper scripts use this stable
+# name inside Docker, independently of the host checkout directory name.
+export PROJECT_WORKSPACE_NAME=h2_ws
 
 # Project-specific arguments (applied on all platforms).
 EXTRA_DOCKER_ARGS_COMMON=()

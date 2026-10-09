@@ -1,8 +1,8 @@
 # ROS 2 packages
 
-Place the H2 ROS 2 packages here before building the workspace:
+This workspace includes the official Unitree model as `h2_description`.
+Add these additional project packages here to enable the remaining sessions:
 
-- `h2_description`
 - `h2_moveit_config`
 - `h2_bridge`
 
