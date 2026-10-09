@@ -1,0 +1,15 @@
+[submodule "wiki/wiki_ros2"]
+	path = wiki/wiki_ros2
+	url = git@gitlab.gwdg.de:robost/ros2/wiki_ros2.git
+	branch = main
+	update = merge
+[submodule "wiki/wiki_robost"]
+	path = wiki/wiki_robost
+	url = git@gitlab.gwdg.de:robost/wiki_robost.git
+	branch = main
+	update = merge
+[submodule "docker/docker_template"]
+	path = docker/docker_template
+	url = git@gitlab.gwdg.de:robost/ros2/misc/docker_template.git
+	branch = humble
+	update = merge

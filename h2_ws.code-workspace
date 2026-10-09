@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../unitree_ros2"
+		},
+		{
+			"path": "../unitree_mujoco"
+		}
+	],
+	"settings": {}
+}
